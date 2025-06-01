@@ -2,76 +2,157 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>DungeonMaster Web-App</title>
+  <title>🎲 DungeonMaster Web-App</title>
   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #1e1e2f;
+      color: #f0f0f0;
     }
-    button, input {
-      margin: 5px;
+
+    header {
+      background: #2e2e40;
+      padding: 20px;
+      text-align: center;
+      font-size: 1.6em;
+      font-weight: bold;
+      color: #fff;
     }
-    textarea {
-      width: 100%;
-      height: 100px;
-      margin-top: 10px;
+
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
     }
+
     .block {
+      background: #2c2c3e;
       margin: 15px 0;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+      color: #fcd34d;
+    }
+
+    input, button {
       padding: 10px;
-      background: #fff;
-      border: 1px solid #ccc;
+      margin: 5px 5px 5px 0;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+    }
+
+    input {
+      background: #444;
+      color: #fff;
+      width: calc(100% - 12px);
+      max-width: 200px;
+    }
+
+    button {
+      background: #4f46e5;
+      color: white;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background: #6366f1;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 0 0;
+    }
+
+    li {
+      background: #3c3c4f;
+      padding: 8px;
+      margin-bottom: 5px;
+      border-radius: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn-delete {
+      background: #ef4444;
+      color: white;
+      padding: 4px 8px;
+      font-size: 0.9em;
+      border-radius: 4px;
+    }
+
+    .btn-delete:hover {
+      background: #f87171;
+    }
+
+    @media (max-width: 600px) {
+      input, button {
+        width: 100%;
+        margin: 5px 0;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>🎲 DungeonMaster Web-App</h1>
+  <header>🎲 DungeonMaster Web-App</header>
+  <div class="container">
 
-  <div class="block">
-    <h2>🧙 Spielerverwaltung</h2>
-    <input id="spieler-name" placeholder="Name">
-    <input id="klasse" placeholder="Klasse">
-    <input id="level" type="number" placeholder="Level">
-    <input id="leben" type="number" placeholder="Leben">
-    <input id="rs" type="number" placeholder="Rüstungsklasse">
-    <button onclick="addPlayer()">➕ Hinzufügen</button>
-    <button onclick="clearPlayers()">❌ Alle löschen</button>
-    <ul id="spieler-liste"></ul>
-  </div>
+    <div class="block">
+      <h2>🧙 Spieler erstellen</h2>
+      <input id="spieler-name" placeholder="Name">
+      <input id="klasse" placeholder="Klasse">
+      <input id="level" type="number" placeholder="Level">
+      <input id="leben" type="number" placeholder="Leben">
+      <input id="rs" type="number" placeholder="Rüstungsklasse">
+      <button onclick="addPlayer()">➕ Hinzufügen</button>
+      <button onclick="clearPlayers()">❌ Alle löschen</button>
+      <ul id="spieler-liste"></ul>
+    </div>
 
-  <div class="block">
-    <h2>🎲 Würfeln</h2>
-    <button onclick="rollDice()">W20 werfen</button>
-    <div id="wurf-ergebnis">Ergebnis: ...</div>
-  </div>
+    <div class="block">
+      <h2>🎲 Würfeln</h2>
+      <button onclick="rollDice()">W20 werfen</button>
+      <div id="wurf-ergebnis">Ergebnis: ...</div>
+    </div>
 
-  <div class="block">
-    <h2>🧱 Dungeon</h2>
-    <button onclick="generateRoom()">Raum generieren</button>
-    <div id="raum-anzeige">...</div>
-  </div>
+    <div class="block">
+      <h2>🧱 Dungeon</h2>
+      <button onclick="generateRoom()">Raum generieren</button>
+      <div id="raum-anzeige">...</div>
+    </div>
 
-  <div class="block">
-    <h2>📜 Quests</h2>
-    <input id="neue-quest" placeholder="Neue Quest">
-    <button onclick="addQuest()">➕ Quest</button>
-    <ul id="quest-liste"></ul>
-  </div>
+    <div class="block">
+      <h2>📜 Quests</h2>
+      <input id="neue-quest" placeholder="Neue Quest eingeben">
+      <button onclick="addQuest()">➕ Hinzufügen</button>
+      <ul id="quest-liste"></ul>
+    </div>
 
-  <div class="block">
-    <h2>🤝 NPC Begegnung</h2>
-    <button onclick="randomNPC()">Treffe NPC</button>
-    <div id="npc-anzeige">...</div>
+    <div class="block">
+      <h2>🤝 NPC-Begegnung</h2>
+      <button onclick="randomNPC()">Treffe NPC</button>
+      <div id="npc-anzeige">...</div>
+    </div>
+
   </div>
 
   <py-script>
 from js import document, localStorage
 import random, json
 
-# Dungeonräume
 raeume = [
     "Ein dunkler Gang voller Spinnenweben.",
     "Ein Raum mit schwebenden Kristallen.",
@@ -80,16 +161,9 @@ raeume = [
     "Ein kühler Kerker mit alten Skeletten."
 ]
 
-# NPCs
 npcs = ["Ein freundlicher Zwerg", "Eine misstrauische Elfe", "Ein betrunkener Magier", "Ein verletzter Abenteurer", "Ein schüchterner Kobold"]
 
-# Globale Daten
-daten = {
-    "spieler": [],
-    "quests": []
-}
-
-# Automatisch laden
+daten = {"spieler": [], "quests": []}
 if localStorage.getItem("dm_daten"):
     daten = json.loads(localStorage.getItem("dm_daten"))
 
@@ -121,6 +195,7 @@ def update_players():
         li.innerText = eintrag
         btn = document.createElement("button")
         btn.innerText = "🗑️"
+        btn.className = "btn-delete"
         btn.onclick = lambda ev, i=idx: delete_player(i)
         li.appendChild(btn)
         liste.appendChild(li)

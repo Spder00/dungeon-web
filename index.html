@@ -2,40 +2,161 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>DungeonMaster Test</title>
+  <title>DungeonMaster Web-App</title>
   <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
   <script defer src="https://pyscript.net/latest/pyscript.js"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
-      background-color: #f5f5f5;
+      margin: 20px;
+      background: #f9f9f9;
     }
-
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      margin: 10px 0;
-      cursor: pointer;
+    button, input {
+      margin: 5px;
     }
-
-    #ausgabe {
-      margin-top: 20px;
-      padding: 15px;
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+    }
+    .block {
+      margin: 15px 0;
+      padding: 10px;
       background: #fff;
       border: 1px solid #ccc;
-      min-height: 60px;
     }
   </style>
 </head>
 <body>
-  <h1>🎲 DungeonMaster Button-Test</h1>
+  <h1>🎲 DungeonMaster Web-App</h1>
 
-  <button id="btn-wuerfeln">🎲 Wurf starten</button>
-  <button id="btn-speichern">💾 Speichern</button>
+  <div class="block">
+    <h2>🧙 Spielerverwaltung</h2>
+    <input id="spieler-name" placeholder="Name">
+    <input id="klasse" placeholder="Klasse">
+    <input id="level" type="number" placeholder="Level">
+    <input id="leben" type="number" placeholder="Leben">
+    <input id="rs" type="number" placeholder="Rüstungsklasse">
+    <button onclick="addPlayer()">➕ Hinzufügen</button>
+    <button onclick="clearPlayers()">❌ Alle löschen</button>
+    <ul id="spieler-liste"></ul>
+  </div>
 
-  <div id="ausgabe">🧾 Ergebnis erscheint hier...</div>
+  <div class="block">
+    <h2>🎲 Würfeln</h2>
+    <button onclick="rollDice()">W20 werfen</button>
+    <div id="wurf-ergebnis">Ergebnis: ...</div>
+  </div>
 
-  <py-script src="main.py"></py-script>
+  <div class="block">
+    <h2>🧱 Dungeon</h2>
+    <button onclick="generateRoom()">Raum generieren</button>
+    <div id="raum-anzeige">...</div>
+  </div>
+
+  <div class="block">
+    <h2>📜 Quests</h2>
+    <input id="neue-quest" placeholder="Neue Quest">
+    <button onclick="addQuest()">➕ Quest</button>
+    <ul id="quest-liste"></ul>
+  </div>
+
+  <div class="block">
+    <h2>🤝 NPC Begegnung</h2>
+    <button onclick="randomNPC()">Treffe NPC</button>
+    <div id="npc-anzeige">...</div>
+  </div>
+
+  <py-script>
+from js import document, localStorage
+import random, json
+
+# Dungeonräume
+raeume = [
+    "Ein dunkler Gang voller Spinnenweben.",
+    "Ein Raum mit schwebenden Kristallen.",
+    "Ein verlassener Altarraum.",
+    "Ein vergifteter Brunnenschacht.",
+    "Ein kühler Kerker mit alten Skeletten."
+]
+
+# NPCs
+npcs = ["Ein freundlicher Zwerg", "Eine misstrauische Elfe", "Ein betrunkener Magier", "Ein verletzter Abenteurer", "Ein schüchterner Kobold"]
+
+# Globale Daten
+daten = {
+    "spieler": [],
+    "quests": []
+}
+
+# Automatisch laden
+if localStorage.getItem("dm_daten"):
+    daten = json.loads(localStorage.getItem("dm_daten"))
+
+def save_data():
+    localStorage.setItem("dm_daten", json.dumps(daten))
+    update_players()
+    update_quests()
+
+def addPlayer():
+    name = document.getElementById("spieler-name").value
+    klasse = document.getElementById("klasse").value
+    level = int(document.getElementById("level").value or 1)
+    leben = int(document.getElementById("leben").value or 10)
+    rs = int(document.getElementById("rs").value or 10)
+    if name:
+        daten["spieler"].append({"name": name, "klasse": klasse, "level": level, "leben": leben, "rs": rs})
+        save_data()
+
+def clearPlayers():
+    daten["spieler"] = []
+    save_data()
+
+def update_players():
+    liste = document.getElementById("spieler-liste")
+    liste.innerHTML = ""
+    for idx, sp in enumerate(daten["spieler"]):
+        eintrag = f"{sp['name']} (Lvl {sp['level']} {sp['klasse']}), Leben: {sp['leben']}, RS: {sp['rs']}"
+        li = document.createElement("li")
+        li.innerText = eintrag
+        btn = document.createElement("button")
+        btn.innerText = "🗑️"
+        btn.onclick = lambda ev, i=idx: delete_player(i)
+        li.appendChild(btn)
+        liste.appendChild(li)
+
+def delete_player(index):
+    daten["spieler"].pop(index)
+    save_data()
+
+def rollDice():
+    ergebnis = random.randint(1, 20)
+    document.getElementById("wurf-ergebnis").innerText = f"🎲 Ergebnis: {ergebnis}"
+
+def generateRoom():
+    raum = random.choice(raeume)
+    document.getElementById("raum-anzeige").innerText = "📍 " + raum
+
+def addQuest():
+    q = document.getElementById("neue-quest").value
+    if q:
+        daten["quests"].append(q)
+        save_data()
+
+def update_quests():
+    liste = document.getElementById("quest-liste")
+    liste.innerHTML = ""
+    for q in daten["quests"]:
+        li = document.createElement("li")
+        li.innerText = q
+        liste.appendChild(li)
+
+def randomNPC():
+    npc = random.choice(npcs)
+    document.getElementById("npc-anzeige").innerText = f"🤝 {npc}"
+
+update_players()
+update_quests()
+  </py-script>
 </body>
 </html>

@@ -1,0 +1,45 @@
+!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>🎲 DungeonMaster WebApp</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+  <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+</head>
+<body>
+
+  <h1>🎲 DungeonMaster KI – D&D WebApp</h1>
+
+  <section id="spieler-section">
+    <input id="name" placeholder="Name">
+    <input id="ini" type="number" placeholder="Initiative">
+    <input id="tp" type="number" placeholder="TP">
+    <button py-click="add_player()">🧙 Spieler hinzufügen</button>
+    <button py-click="clear_data()">🗑️ Spieler löschen</button>
+  </section>
+
+  <h2>🧑‍🤝‍🧑 Initiative</h2>
+  <ul id="player-list"></ul>
+
+  <section id="tools">
+    <button py-click="random_room()">📜 Dungeonraum</button>
+    <button py-click="random_spell()">✨ Zufallszauber</button>
+    <button py-click="roll_die()">🎲 Würfeln</button>
+  </section>
+
+  <section>
+    <textarea id="quest" placeholder="📝 Neue Quest..."></textarea>
+    <button py-click="add_quest()">➕ Quest hinzufügen</button>
+    <ul id="quest-list"></ul>
+  </section>
+
+  <h2>📖 Logbuch</h2>
+  <textarea id="notes" placeholder="📒 Notizen speichern..." rows="6" cols="60"></textarea>
+  <button py-click="save_notes()">💾 Notizen speichern</button>
+
+  <div id="log"></div>
+
+  <py-script src="main.py"></py-script>
+</body>
+</html>

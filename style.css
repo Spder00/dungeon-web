@@ -1,0 +1,35 @@
+body {
+  background: #1a1a2e;
+  color: #eee;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+input, textarea, button {
+  margin: 5px;
+  padding: 8px;
+}
+button {
+  background: #27293d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #3a3d5c;
+}
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+#log {
+  margin-top: 15px;
+  background: #111;
+  padding: 10px;
+  max-height: 200px;
+  overflow-y: auto;
+}
